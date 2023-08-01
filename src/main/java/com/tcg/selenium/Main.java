@@ -9,19 +9,51 @@ public class Main {
     static WebDriver driver = null;
     public static void main(String[] args) {
         System.out.println("running....");
-        insertText();
+        enableEditInOffice();
     }
 
-    public static void insertText() {
+    public static void enableEditInOffice() {
          driver = new ChromeDriver();
 
         driver.get("http://localhost:8090/");
 
         loginIfNeeded();
 
+        gotoAdminScreen("Office Connector");
+        setCheckedState("editInOffice", true);
+        setCheckedState("pathAuth", true);
+
+        pauseForDemo(2000);
+        driver.findElement(By.xpath("//input[@value='Submit']")).click();
+        pauseForDemo(2000);
+
 
         // Make sure to close the driver when you're done.
         driver.quit();
+    }
+
+    public static void pauseForDemo(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static void setCheckedState(String elementID, boolean desiredState) {
+        WebElement el = driver.findElement(By.id(elementID));
+        if (el.isSelected() != desiredState) {
+            driver.findElement(By.xpath("//label[@for='" + elementID + "']")).click();
+        }
+    }
+
+    public static void gotoAdminScreen(String adminPageName) {
+        driver.findElement(By.id("admin-menu-link")).click();
+        driver.findElement(By.id("administration-link")).click();
+        loginIfNeeded();
+        String xPath = "//a[contains(text(),'Office Connector')]";
+        driver.findElement(By.xpath(xPath)).click();
     }
 
     public static void loginIfNeeded() {
@@ -31,11 +63,16 @@ public class Main {
             driver.findElement(By.id("loginButton")).click();
         }
 
+        if (isPageTitle("Administrator Access - Confluence")) {
+            driver.findElement(By.id("password")).sendKeys(System.getenv("CONF_PASS"));
+            driver.findElement(By.id("authenticateButton")).click();
+        }
+
     }
 
     public static boolean isPageTitle(String title){
-        String currentPageTitle = driver.getTitle();
-        return title.equalsIgnoreCase(currentPageTitle);
+        String currentPageTitle = driver.getTitle().replace(" ", "");
+        return title.replace(" ", "").equalsIgnoreCase(currentPageTitle);
     }
 }
 
