@@ -14,19 +14,22 @@ public class Main {
 
     public static void enableEditInOffice() {
          driver = new ChromeDriver();
-
         driver.get("http://localhost:8090/");
 
         loginIfNeeded();
 
-        gotoAdminScreen("Office Connector");
-        setCheckedState("editInOffice", true);
-        setCheckedState("pathAuth", true);
+        gotoAdminScreen("Further Configuration");
 
-        pauseForDemo(2000);
-        driver.findElement(By.xpath("//input[@value='Submit']")).click();
-        pauseForDemo(2000);
+        // click the edit button
+        String edit_xpath ="//a[@href='/admin/editspacesconfig.action#features']";
+        WebElement edit_button = driver.findElement(By.xpath( edit_xpath ));
+        edit_button.click();
 
+        // set checkbox state to no threaded comments
+        setCheckedState("allowThreadedComments", false);
+
+        // save the form
+        driver.findElement(By.xpath("//input[@value='Save']")).click();
 
         // Make sure to close the driver when you're done.
         driver.quit();
@@ -52,7 +55,8 @@ public class Main {
         driver.findElement(By.id("admin-menu-link")).click();
         driver.findElement(By.id("administration-link")).click();
         loginIfNeeded();
-        String xPath = "//a[contains(text(),'Office Connector')]";
+        pauseForDemo(1000);
+        String xPath = "//a[contains(text(),'"++"')]";
         driver.findElement(By.xpath(xPath)).click();
     }
 
@@ -60,11 +64,13 @@ public class Main {
         if (isPageTitle("Log In - Confluence")) {
             driver.findElement(By.id("os_username")).sendKeys(System.getenv("CONF_USER"));
             driver.findElement(By.id("os_password")).sendKeys(System.getenv("CONF_PASS"));
+            pauseForDemo(1000);
             driver.findElement(By.id("loginButton")).click();
         }
 
         if (isPageTitle("Administrator Access - Confluence")) {
             driver.findElement(By.id("password")).sendKeys(System.getenv("CONF_PASS"));
+            pauseForDemo(1000);
             driver.findElement(By.id("authenticateButton")).click();
         }
 
