@@ -1,5 +1,5 @@
-# selenium_standalone
-## Sample Atlassian Confluence Autmated Configuration
+# Confluence Automated Configuration
+## Sample Java App for Atlassian Confluence Autmated Configuration
 
 This is a sample project that will use Selenium to modify a configuration setting
 in Confluence.  When run, this code will login to Confluence and turn off
