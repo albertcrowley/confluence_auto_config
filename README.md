@@ -6,6 +6,7 @@ in Confluence.  When run, this code will login to Confluence and turn off
 threaded comments.
 
 [![Watch the video](https://img.youtube.com/vi/nGTfZhSVnJA/0.jpg)](https://youtu.be/nGTfZhSVnJA)
+
 Click the image above to see it in action.
 
 Usage:
